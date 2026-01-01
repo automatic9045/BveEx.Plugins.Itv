@@ -49,9 +49,6 @@
     <Reference Include="FastMember, Version=2.1.51225.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\BveEx.PluginHost.2.1.0\lib\FastMember.dll</HintPath>
     </Reference>
-    <Reference Include="Mackoy.XmlInterfaces">
-      <HintPath>C:\Program Files (x86)\mackoy\BveTs5\Mackoy.XmlInterfaces.DLL</HintPath>
-    </Reference>
     <Reference Include="ObjectiveHarmonyPatch, Version=1.2.50130.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectiveHarmonyPatch.1.2.0\lib\ObjectiveHarmonyPatch.dll</HintPath>
     </Reference>

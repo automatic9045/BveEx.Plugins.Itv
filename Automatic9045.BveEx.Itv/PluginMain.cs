@@ -16,7 +16,6 @@ using TypeWrapping;
 
 using BveEx.Extensions.MapStatements;
 using BveEx.PluginHost.Plugins;
-using BveEx.PluginHost;
 
 namespace Automatic9045.BveEx.Itv
 {
@@ -68,19 +67,29 @@ namespace Automatic9045.BveEx.Itv
                 RectangleF originalPlane = BveHacker.Scenario.Vehicle.CameraLocation.Plane;
                 Renderer.Tick();
 
-                int originalDrawDistance = BveHacker.MainForm.Preferences.DrawDistance;
-                BveHacker.MainForm.Preferences.DrawDistance = 175;
+                double location = BveHacker.Scenario.VehicleLocation.Location;
+
+                ObjectDrawer objectDrawer = BveHacker.Scenario.ObjectDrawer;
+                double backDrawDistance = objectDrawer.DrawDistanceManager.BackDrawDistance;
+                double frontDrawDistance = objectDrawer.DrawDistanceManager.FrontDrawDistance;
 
                 foreach (Monitor monitor in Monitors)
                 {
-                    double distance = monitor.Location - BveHacker.Scenario.VehicleLocation.Location;
-                    if (-BveHacker.MainForm.Preferences.BackDrawDistance < distance && distance < BveHacker.MainForm.Preferences.DrawDistance)
+                    double monitorDistance = monitor.Location - location;
+                    if (-backDrawDistance < monitorDistance && monitorDistance < frontDrawDistance)
                     {
+                        double cameraDistance = monitor.Camera.Location - location;
+                        objectDrawer.DrawDistanceManager.BackDrawDistance = Math.Max(-cameraDistance + 100, backDrawDistance);
+                        objectDrawer.DrawDistanceManager.FrontDrawDistance = Math.Max(cameraDistance + 100, frontDrawDistance);
+                        objectDrawer.StructureDrawer.OnDrawLocationRangeUpdated(objectDrawer.StructureDrawer.Src, EventArgs.Empty);
+
                         monitor.Render();
                     }
                 }
 
-                BveHacker.MainForm.Preferences.DrawDistance = originalDrawDistance;
+                objectDrawer.DrawDistanceManager.BackDrawDistance = backDrawDistance;
+                objectDrawer.DrawDistanceManager.FrontDrawDistance = frontDrawDistance;
+                objectDrawer.StructureDrawer.OnDrawLocationRangeUpdated(objectDrawer.StructureDrawer.Src, EventArgs.Empty);
 
                 device.SetRenderTarget(0, OriginalRenderTarget);
                 device.SetTransform(TransformState.View, Matrix.Identity);
@@ -109,7 +118,6 @@ namespace Automatic9045.BveEx.Itv
             OnDeviceLostPatch.Dispose();
 
             FreeResources();
-            BveHacker.MainForm.Preferences.BackDrawDistance = 50;
         }
 
         private void FreeResources()

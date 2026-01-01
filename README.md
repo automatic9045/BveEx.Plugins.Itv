@@ -24,6 +24,3 @@ Copyright (c) 2022 automatic9045
 
 ### [SlimDX](https://www.nuget.org/packages/SlimDX/) (MIT)
 Copyright (c) 2013  exDreamDuck
-
-### [Mackoy.XmlInterfaces.dll](https://bvets.net)
-Copyright (c) 2020  mackoy
